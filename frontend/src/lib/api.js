@@ -1,8 +1,12 @@
+// 1. Define the Base URL from your environment variables
+const BASE_URL = process.env.REACT_APP_API_URL || ""; 
+
 export async function uploadCsvFile(file) {
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await fetch("/predict/upload", {
+  // 2. Attach the BASE_URL to the front of the path
+  const response = await fetch(`${BASE_URL}/predict/upload`, {
     method: "POST",
     body: formData
   });
@@ -22,15 +26,12 @@ export async function uploadCsvFile(file) {
     throw new Error(data.detail || `Upload failed with status ${response.status}`);
   }
 
-  if (!rawBody) {
-    throw new Error("Backend returned an empty response.");
-  }
-
   return data;
 }
 
 export async function fetchLenderDashboard() {
-  const response = await fetch("/predict/lender-dashboard");
+  // 2. Attach the BASE_URL here too
+  const response = await fetch(`${BASE_URL}/predict/lender-dashboard`);
   const rawBody = await response.text();
   let data = {};
 
